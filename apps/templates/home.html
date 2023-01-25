@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Rate</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      h1 {
+        width: 100%;
+        text-align: center;
+      }
+      .counter {
+        width: 100%;
+        height: auto;
+      }
+      .counter .items {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+      }
+      .counter .items .header {
+        font: 900;
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fake Crypto Rate</h1>
+    <div class="counter">
+      <div class="items">
+        <div class="header">BTC :</div>
+        <div class="rate" id="BTC">100$</div>
+      </div>
+
+      <div class="items">
+        <div class="header">ETH :</div>
+        <div class="rate" id="ETH">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">USDT :</div>
+        <div class="rate" id="USDT">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">BNB :</div>
+        <div class="rate" id="BNB">100$</div>
+      </div>
+
+      <div class="items">
+        <div class="header">USDC :</div>
+        <div class="rate" id="USDC">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">XRP :</div>
+        <div class="rate" id="XRP">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">BUSD :</div>
+        <div class="rate" id="BUSD">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">ADA :</div>
+        <div class="rate" id="ADA">100$</div>
+      </div>
+      <div class="items">
+        <div class="header">LTC :</div>
+        <div class="rate" id="LTC">100$</div>
+      </div>
+    </div>
+
+    <script>
+      const rate = document.getElementsByClassName("rate");
+      const ws = new WebSocket("ws://127.0.0.1:8000/ws/crypto");
+      ws.onopen = (e) => {
+        console.log("websocket connected");
+        ws.send("get crypto rate");
+      };
+      ws.onmessage = (e) => {
+        const cryptoData = JSON.parse(e.data);
+        const cryptoKey = Object.keys(cryptoData);
+        for (let dataIndex = 0; dataIndex < cryptoKey.length; dataIndex++) {
+          for (let index = 0; index < rate.length; index++) {
+            if (rate[index].id === cryptoKey[index]) {
+              rate[index].innerHTML = cryptoData[cryptoKey[index]];
+            }
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
